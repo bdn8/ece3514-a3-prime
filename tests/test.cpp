@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
-#include "c:\ece3514\A2\include\prime.hpp"
+#include "c:\ece3514\A3\ece3514-a3-prime\include\prime.hpp"
 
 TEST_CASE("Base cases: n <= 1 are not prime, no mod ops") {
     long long ops = 123;
@@ -82,4 +82,34 @@ TEST_CASE("Range counters sum per-call mod ops") {
 TEST_CASE("Large expected outputs from prompt") {
     REQUIRE(countModOpsHalf(2, 10'000) == 1461014LL);
     REQUIRE(countModOpsSqrt(2, 10'000) == 65956LL);
+}
+
+
+TEST_CASE("Smart pointer versions match raw pointer versions for small ranges") {
+    REQUIRE(countModOpsHalf_sp(2, 10) == countModOpsHalf(2, 10));
+    REQUIRE(countModOpsSqrt_sp(2, 10) == countModOpsSqrt(2, 10));
+}
+
+TEST_CASE("Smart pointer versions handle single values correctly") {
+    REQUIRE(countModOpsHalf_sp(2, 2) == countModOpsHalf(2, 2));
+    REQUIRE(countModOpsSqrt_sp(2, 2) == countModOpsSqrt(2, 2));
+
+    REQUIRE(countModOpsHalf_sp(9, 9) == countModOpsHalf(9, 9));
+    REQUIRE(countModOpsSqrt_sp(9, 9) == countModOpsSqrt(9, 9));
+}
+
+TEST_CASE("Smart pointer versions produce non-zero counts over ranges") {
+    REQUIRE(countModOpsHalf_sp(2, 50) > 0);
+    REQUIRE(countModOpsSqrt_sp(2, 50) > 0);
+}
+
+TEST_CASE("Smart pointer sqrt method") {
+    long long halfOps = countModOpsHalf_sp(2, 1000);
+    long long sqrtOps = countModOpsSqrt_sp(2, 1000);
+    REQUIRE(sqrtOps <= halfOps);
+}
+
+TEST_CASE("Smart pointer versions match large expected outputs from prompt") {
+    REQUIRE(countModOpsHalf_sp(2, 10'000) == 1461014LL);
+    REQUIRE(countModOpsSqrt_sp(2, 10'000) == 65956LL);
 }

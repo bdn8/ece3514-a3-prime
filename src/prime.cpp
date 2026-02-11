@@ -1,4 +1,5 @@
 #include "prime.hpp"
+#include <memory>
 
 static inline void inc(long long* modOps) {
     if (modOps) { (*modOps)++; }
@@ -52,5 +53,29 @@ long long countModOpsSqrt(int lo, int hi) {
         isPrimeSqrt(n, &ops);
         total += ops;
     }
+    return total;
+}
+
+long long countModOpsHalf_sp(int lo, int hi) {
+    long long total = 0;
+
+    for (int n = lo; n <= hi; ++n) {
+        auto ops = std::make_unique<long long>(0);
+        isPrimeHalf(n, ops.get());
+        total += *ops;
+    }
+
+    return total;
+}
+
+long long countModOpsSqrt_sp(int lo, int hi) {
+    long long total = 0;
+
+    for (int n = lo; n <= hi; ++n) {
+        auto ops = std::make_unique<long long>(0);
+        isPrimeSqrt(n, ops.get());
+        total += *ops;
+    }
+
     return total;
 }
